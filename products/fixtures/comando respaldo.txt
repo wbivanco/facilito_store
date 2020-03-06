@@ -1,0 +1,6 @@
+Respladar:
+python3 manage.py dumpdata products.product --format=json --indent=4 > products/fixtures/products.json
+
+Recuperar:
+python3 manage.py loaddata products.json
+

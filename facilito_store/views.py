@@ -19,10 +19,18 @@ from django.contrib.auth.models import User
 # Formularios
 from .forms import RegisterForm
 
-
+# Modelos
+from products.models import Product
 
 def index(request):
-	return render(request,'index.html',{'message':'nuevo mensaje'})
+
+	products = Product.objects.all().order_by('-id')
+
+	return render(request,'index.html',{
+		'message':'Listado de productos', 
+		'title': 'Productos', 
+		'products': products,
+		})
 
 def login_view(request):
 	if request.user.is_authenticated:
