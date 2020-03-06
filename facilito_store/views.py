@@ -14,7 +14,8 @@ from django.contrib.auth import logout
 # Permite autenticar los valores del formulario
 from django.contrib.auth import authenticate
 # Permite acceder y manipular almodelo User
-from django.contrib.auth.models import User
+#from django.contrib.auth.models import User
+from users.models import User
 
 # Formularios
 from .forms import RegisterForm
