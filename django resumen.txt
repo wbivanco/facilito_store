@@ -1,0 +1,114 @@
+			##### Settigs #####
+STATIC_URL = '/static/'
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+			##### Models #####
+models.ManyToManyField(Modelo, blank=True)
+
+--- Incio ---
+# Permnite hacer slug automatico
+from django.utils.text import slugify
+
+slugify('algo')
+--- Fin ---
+
+--- Inicio ---
+# Permite usar el signal antes de guardar
+from django.db.models.signals import pre_save
+
+def nombre_metodo(sender, instance, *args, **kwargs):
+	....
+
+pre_save.connect(nombre_metodo, sender=Modelo)
+--- Fin ---
+# Importo el modelo de usuario de Django
+from django.contrib.auth.models import User
+
+--- Inicio ---
+# Primera forma de implementar User, solo funcionalidades(métodos)
+class Modelo(User):
+	class Meta:
+		proxy = True
+
+	def get_algo(self):
+		return []
+--- Fin ---
+
+--- Inicio ---
+# Segunda forma de implementar User, agregar atributos
+class Modelo(models.Model):
+	user = models.OneToOneField(User, on_delete=models.CASCADE)
+	campo = models.TextField()
+--- Fin ---
+
+--- Inicio ---
+# Tercera forma de implementar User, heredar de:
+AbstracUSer
+- username
+- first_name
+- last_name
+- email
+- password
+- groups
+- user_permissions
+- is_staff
+- is_active
+- is_usperuser
+- last_login
+- date_joined	
+
+AbstractBaseUSer
+- id
+- password
+- last_login
+
+--- Fin ---
+
+			##### Admin #####
+--- Inicio ---
+class ModeloAdmin(admin.ModelAdmin):
+	# Permite la carga en el admin de los campos de la tupla
+	fields = ('campo1', 'campo2')
+	
+	# Permite por ver los campos en el admin
+	list_display = ('__str__', 'campo1', 'campo3')
+
+admin.site.register(Modelo, ModeloAdmin)
+--- Fin ---
+
+			##### URLS #####
+# Funciona como namespace
+app_name = 'nombre_app'
+
+
+			##### Views #####
+# Permite dar como respuesta un html renderizado
+from django.shortcuts import render
+
+# Permite redirijir
+from django.shortcuts import redirect
+
+# Permite dar respuesta a una peticion(texto)
+from django.http import HttpResponse
+
+# Permite enviar mensajes al servidor
+from django.contrib import messages
+
+# Permite generar una sesion 
+from django.contrib.auth import login
+
+# Permite cerrar la session
+from django.contrib.auth import logout
+
+# Permite autenticar los valores del formulario
+from django.contrib.auth import authenticate
+
+# Permite acceder y manipular almodelo User
+from django.contrib.auth.models import User
