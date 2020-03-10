@@ -9,8 +9,30 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
+			##### Filtro propio #####
+# Debe estar dentro de modulo/templatetags y el archivo se debe llamar: modelo_extras
+from django import template
+
+register = template.Library()
+
+@register.filter()
+def price_format(value):
+	return '${0:.2f}'.format(value)
+
+# En template y usar pipeline
+{% load product_extras %}
+
+
 			##### Models #####
 models.ManyToManyField(Modelo, blank=True)
+
+# Agregar elemento a relación mtm
+# modelo.relacion.add(objeto)
+cart.products.add(product)
+
+# Eliminar elemento de relación mtm
+# modelo.relacion.remove(objeto)
+cart.products.remove(product)
 
 --- Incio ---
 # Permnite hacer slug automatico
@@ -71,6 +93,7 @@ AbstractBaseUSer
 
 --- Fin ---
 
+
 			##### Admin #####
 --- Inicio ---
 class ModeloAdmin(admin.ModelAdmin):
@@ -82,6 +105,7 @@ class ModeloAdmin(admin.ModelAdmin):
 
 admin.site.register(Modelo, ModeloAdmin)
 --- Fin ---
+
 
 			##### URLS #####
 # Funciona como namespace
@@ -112,3 +136,16 @@ from django.contrib.auth import authenticate
 
 # Permite acceder y manipular almodelo User
 from django.contrib.auth.models import User
+
+# Permite objtener un objeto o un 404 en lugar de un 500
+from django.shortcuts import get_object_or_404
+
+
+# Crear una sesion,solo se necesita crear una nueva llave en el diccionario
+request.session['cart_id'] = '123'
+
+# Recuperar una sesion
+request.session.get('cart_id')
+
+# Eliminar una sesion
+request.session['cart_id'] = None

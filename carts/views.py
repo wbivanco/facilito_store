@@ -1,6 +1,6 @@
 from django.shortcuts import render
-# Para poder reireccionar
 from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404
 
 # Crear una sesion,solo se necesita crear una nueva llave en el diccionario
 #request.session['cart_id'] = '123'
@@ -23,17 +23,20 @@ def cart(request):
 
 def add(request):
 	cart = get_or_create_cart(request)
-	product = Product.objects.get(pk=request.POST.get('product_id'))
+	product = get_object_or_404(Product, pk=request.POST.get('product_id'))	
+	quantity = request.POST.get('quantity', 1)
 
-	cart.products.add(product)
+	cart.products.add(product, through_defaults={
+		'quantity': quantity
+	})
 
 	return render(request, 'carts/add.html', {
 			'product': product
 		})
 
-def remove():
+def remove(request):
 	cart = get_or_create_cart(request)
-	product = Product.objects.get(pk=request.POST.get('product_id'))
+	product = get_object_or_404(Product, pk=request.POST.get('product_id'))	
 
 	cart.products.remove(product)
 
