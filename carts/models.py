@@ -43,14 +43,16 @@ class CartProducts(models.Model):
 	quantity = models.IntegerField(default=1)
 	created_at = models.DateTimeField(auto_now_add=True)
 
-
+# Creo un callback que unicamente cree el cart si no hay un carrito creado 
 def set_cart_id(sender, instance, *args, **kwargs):
 	if not instance.cart_id:
+		# Genero un string unico
 		instance.cart_id = str(uuid.uuid4())
 
 def update_totals(sender, instance, action, *args, **kwargs):
 	if action == 'post_add' or action == 'post_remove' or action == 'post_clear':
 		instance.update_totals()
 
+# Vinculo el callbak de creación del cart con el signal
 pre_save.connect(set_cart_id, sender=Cart)
 m2m_changed.connect(update_totals, sender=Cart.products.through)
