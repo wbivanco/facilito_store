@@ -33,6 +33,7 @@ class Cart(models.Model):
 		self.total = self.subtotal + (self.subtotal * decimal.Decimal(Cart.FEE))
 		self.save()
 
+	# Permite obtener todos lo objetos de una relación es como hacer 2 join juntos
 	def product_related(self):
 		return self.cartproducts_set.select_related('product')
 
