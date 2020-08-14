@@ -49,10 +49,13 @@ def set_cart_id(sender, instance, *args, **kwargs):
 		# Genero un string unico
 		instance.cart_id = str(uuid.uuid4())
 
+# Creo el callback para actualizar el submtotal y el total del carrito de compras
 def update_totals(sender, instance, action, *args, **kwargs):
+	# El callback se dispara cuando alguno de las siguientes acciones se ejecutan 
 	if action == 'post_add' or action == 'post_remove' or action == 'post_clear':
 		instance.update_totals()
 
 # Vinculo el callbak de creación del cart con el signal
 pre_save.connect(set_cart_id, sender=Cart)
+# Vinculo el callback de calculo de subtotal y total con el signal
 m2m_changed.connect(update_totals, sender=Cart.products.through)
